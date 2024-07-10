@@ -15,17 +15,17 @@
 // number of Message Queue Objects
 #define MSGQUEUE_OBJECTS 16
 
-char recvbuf[512];
+char recvbuf[512]; // 收到的信息
 
 static void TCP2in1Task(void) // 从电脑收
 {
 	// 连接Wifi
 	WifiConnect("dacongming", "79#zB791");
 
-	// 在sock_fd 进行监听， 在 new_fd 接收新的链接
+	// 在sock_fd 进行监听，在 new_fd 接收新的链接
 	int sock_fd, new_fd;
 
-	char *buf = "GET!!";
+	char *buf = "GET!!";	
 
 	// 服务端地址信息
 	struct sockaddr_in server_sock;
@@ -36,17 +36,17 @@ static void TCP2in1Task(void) // 从电脑收
 
 	struct sockaddr_in *cli_addr;
 
-	// 创建 socket
-	if((sock_fd = socket(AF_INET, SOCK_STREAM, 0)) == -1)
+	// 创建socket
+	if ((sock_fd = socket(AF_INET, SOCK_STREAM, 0)) == -1)
 	{
-		perror("socket is erroe\r\n");
-		exet(1);
+		perror("socket is error\r\n");
+		exit(1);
 	}
-	// 定义server_sock对象， 以便与电脑端建立连接
+    //定义server_sork对象，以便与电脑端建立连接，然后通过socket接受来自电脑端的数据并打印到屏幕上
 	bzero(&server_sock, sizeof(server_sock));
-	server_sock.sin_family = AF_INIT;
+	server_sock.sin_family = AF_INET;
 	server_sock.sin_addr.s_addr = htonl(INADDR_ANY);
-	server_sock.sin_port = htons(_PORT_);
+	server_sock.sin_port = htons(_PROT_);
 
 	// 调用bind函数绑定socket和地址
 	if (bind(sock_fd, (struct sockaddr *)&server_sock, sizeof(struct sockaddr)) == -1)
@@ -64,7 +64,7 @@ static void TCP2in1Task(void) // 从电脑收
 
 	printf("start accept\n");
 
-	// 从队列中调用 accept 函数
+	// 调用accept函数从队列中
 	while (1)
 	{
 		sin_size = sizeof(struct sockaddr_in);
@@ -77,7 +77,7 @@ static void TCP2in1Task(void) // 从电脑收
 
 		cli_addr = malloc(sizeof(struct sockaddr));
 
-		printf("accept addr\r\n");
+		printf("accept addr\r\n");	
 
 		if (cli_addr != NULL)
 		{
@@ -107,8 +107,51 @@ static void TCP2in1Task(void) // 从电脑收
 		send_addr_pi2.sin_addr.s_addr = inet_addr("192.168.68.90");
 		addr_length_pi2 = sizeof(send_addr_pi2);
 
-		connect(sock_fd_pi2, (struct sockaddr *)&send_addr_pi2, addr_length_pi2);
+		connect( , (struct sockaddr *)&send_addr_pi2, addr_length_pi2);
 		printf("connect success\n");
+
+		// 处理目标
+		ssize_t ret;
+
+		while (1)
+		{
+			bzero(recvbuf, sizeof(recvbuf));
+			if ((ret = recv(new_fd, recvbuf, sizeof(recvbuf), 0)) == -1)
+			{
+				printf("recv error \r\n");
+			}
+			else
+			{
+				printf("recv :%s\r\n", recvbuf);
+			}
+
+			// 总计发送 1 次数据
+
+			// bzero(recvBuf_pi2, sizeof(recvBuf_pi2));
+
+			// 发送数据到服务远端
+			send(sock_fd_pi2, send_data_pi2, strlen(send_data_pi2), 0);
+			printf("send success\r\n");
+
+			// 线程休眠一段时间
+			// sleep(1);
+
+			// 接收服务端返回的字符串
+			//  recv(sock_fd, recvBuf, sizeof(recvBuf), 0);
+			//  printf("%s:%d=>%s\n", inet_ntoa(send_addr.sin_addr), ntohs(send_addr.sin_port), recvBuf);
+
+			// sleep(1);
+			//  if ((ret = send(new_fd, buf, strlen(buf)+1, 0)) == -1)
+			//  {
+			//  	perror("send : ");
+			//  }
+
+			// sleep(1);
+		}
+
+		// close(new_fd);
+
+		// closesocket(sock_fd_pi2);
 	}
 }
 
