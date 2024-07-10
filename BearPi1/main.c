@@ -12,15 +12,15 @@
 #define _PROT2_ 8888
 #define TCP_BACKLOG 10
 
+// number of Message Queue Objects
 #define MSGQUEUE_OBJECTS 16
+
+char recvbuf[512];
 
 static void TCP2in1Task(void) // 从电脑收
 {
 	// 连接Wifi
 	WifiConnect("dacongming", "79#zB791");
-
-	// 待添加调试信息...
-	printf("WiFi connected\n");
 
 	// 在sock_fd 进行监听， 在 new_fd 接收新的链接
 	int sock_fd, new_fd;
@@ -32,7 +32,9 @@ static void TCP2in1Task(void) // 从电脑收
 
 	// 客户端地址信息
 	struct sockaddr_in client_sock;
+	int sin_size;
 
+	struct sockaddr_in *cli_addr;
 
 	// 创建 socket
 	if((sock_fd = socket(AF_INET, SOCK_STREAM, 0)) == -1)
@@ -40,7 +42,6 @@ static void TCP2in1Task(void) // 从电脑收
 		perror("socket is erroe\r\n");
 		exet(1);
 	}
-
 	// 定义server_sock对象， 以便与电脑端建立连接
 	bzero(&server_sock, sizeof(server_sock));
 	server_sock.sin_family = AF_INIT;
@@ -63,12 +64,51 @@ static void TCP2in1Task(void) // 从电脑收
 
 	printf("start accept\n");
 
-	
-	// 保持任务运行
+	// 从队列中调用 accept 函数
 	while (1)
 	{
-		// 暂停片刻
-		osDelay(1000);
+		sin_size = sizeof(struct sockaddr_in);
+
+		if ((new_fd = accept(sock_fd, (struct sockaddr *)&client_sock, (socklen_t *)&sin_size)) == -1)
+		{
+			perror("accept");
+			continue;
+		}
+
+		cli_addr = malloc(sizeof(struct sockaddr));
+
+		printf("accept addr\r\n");
+
+		if (cli_addr != NULL)
+		{
+			memcpy(cli_addr, &client_sock, sizeof(struct sockaddr));
+		}
+
+		// 在sock_fd 进行监听，在 new_fd 接收新的链接
+		int sock_fd_pi2;
+
+		static const char *send_data_pi2 = recvbuf;
+
+		// 服务器的地址信息
+		struct sockaddr_in send_addr_pi2;
+		socklen_t addr_length_pi2 = sizeof(send_addr_pi2);
+		char recvBuf_pi2[512];
+
+		// 创建socket
+		if ((sock_fd_pi2 = socket(AF_INET, SOCK_STREAM, 0)) == -1)
+		{
+			perror("create socket failed!\r\n");
+			exit(1);
+		}
+
+		// 初始化预连接的服务端地址
+		send_addr_pi2.sin_family = AF_INET;
+		send_addr_pi2.sin_port = htons(_PROT2_);
+		send_addr_pi2.sin_addr.s_addr = inet_addr("192.168.68.90");
+		addr_length_pi2 = sizeof(send_addr_pi2);
+
+		connect(sock_fd_pi2, (struct sockaddr *)&send_addr_pi2, addr_length_pi2);
+		printf("connect success\n");
 	}
 }
 
