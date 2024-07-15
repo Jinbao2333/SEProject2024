@@ -1,0 +1,7 @@
+{
+  "usingComponents": {
+    "van-panel": "/components/vant/panel/index"
+  },
+  "enablePullDownRefresh": true,
+  "navigationBarTitleText": "快递首页"
+}
