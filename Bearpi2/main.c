@@ -85,6 +85,52 @@ static int msg_rcv_callback(oc_mqtt_profile_msgrcv_t *msg)
 	return 0;
 }
 
+int Pi_to_Cloud(void)
+{
+	app_msg_t *app_msg;
+	uint32_t ret;
+
+	dtls_al_init();
+	mqtt_al_init();
+	oc_mqtt_init();
+
+	g_app_cb.app_msg = queue_create("queue_rcvmsg", 10, 1);
+	if (NULL == g_app_cb.app_msg)
+	{
+		printf("Create receive msg queue failed");
+	}
+	oc_mqtt_profile_connect_t connect_para;
+	(void)memset(&connect_para, 0, sizeof(connect_para));
+
+	connect_para.boostrap = 0;
+	connect_para.device_id = CONFIG_APP_DEVICEID;
+	connect_para.device_passwd = CONFIG_APP_DEVICEPWD;
+	connect_para.server_addr = CONFIG_APP_SERVERIP;
+	connect_para.server_port = CONFIG_APP_SERVERPORT;
+	connect_para.life_time = CONFIG_APP_LIFETIME;
+	connect_para.rcvfunc = msg_rcv_callback;
+	connect_para.security.type = EN_DTLS_AL_SECURITY_TYPE_NONE;
+	ret = oc_mqtt_profile_connect(&connect_para);
+	if ((ret == (int)en_oc_mqtt_err_ok))
+	{
+		g_app_cb.connected = 1;
+		printf("oc_mqtt_profile_connect succed!\r\n");
+	}
+	else
+	{
+		printf("oc_mqtt_profile_connect faild!\r\n");
+	}
+
+	oc_mqtt_profile_msgup_t msg;
+	msg.device_id = "64784989f4d13061fc88ae1d_BearPi1";
+	msg.name = NULL;
+	msg.id = NULL;
+	msg.msg = (void *)recvbuf;
+	msg.msg_len = sizeof(msg.msg) / sizeof(char);
+	oc_mqtt_profile_msgup("64784989f4d13061fc88ae1d_BearPi1", &msg);
+	return 0;
+}
+
 static void TCPServerTask(void)
 {
 	// 服务端地址信息
