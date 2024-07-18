@@ -1,0 +1,21 @@
+<view class="box">
+  <block wx:for="{{messages}}" wx:key="date">
+    <van-panel title="{{item.title}}" desc="{{item.date}}" bindtap="click" data-obj="{{item}}">
+      <view class="content">
+        <!-- <image class="" src="{{item.image}}" mode="widthFix" lazy-load="false" /> -->
+        <text>{{item.summary}}</text>
+      </view>
+    </van-panel>
+  </block>
+</view>
+
+<modal hidden="{{hidden}}" title="详细信息" confirm-text="确定" cancel-text="取消" bindcancel="cancel" bindconfirm="confirm" no-cancel="{{nocancel}}">
+    <view class="content">
+        <text>货架号：{{shelf_num}}\n</text>
+        <text>到货时间：{{delivery_date}}\n</text>
+        <text>商品信息：{{package_description}}\n</text>
+      </view>
+       <view>
+        <image class="image" src="{{location_path}}" mode='widthFix'></image>
+      </view>
+</modal>
