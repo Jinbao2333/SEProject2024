@@ -1,0 +1,36 @@
+{
+  "pages": [
+    "pages/message/message",
+    "pages/profile/profile"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#3a4861",
+    "navigationBarTitleText": "易达",
+    "navigationBarTextStyle": "white",
+    "backgroundColor":"#bcc0c9"
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json",
+  "tabBar": {
+    "color": "#999",
+    "selectedColor": "#333",
+    "borderStyle": "black",
+    "position": "bottom",
+    "backgroundColor": "#fff",
+    "list": [
+      {
+        "pagePath": "pages/message/message",
+        "text": "首页",
+        "iconPath": "assets/tabs/home.png",
+        "selectedIconPath": "assets/tabs/home-active.png"
+      },
+      {
+        "pagePath": "pages/profile/profile",
+        "text": "我的",
+        "iconPath": "assets/tabs/profile.png",
+        "selectedIconPath": "assets/tabs/profile-active.png"
+      }
+    ]
+  }
+}

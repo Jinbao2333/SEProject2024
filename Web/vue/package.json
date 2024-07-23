@@ -1,0 +1,44 @@
+{
+  "name": "paper-demo",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "serve": "vue-cli-service serve --open",
+    "build": "vue-cli-service build"
+  },
+  "dependencies": {
+    "@element-plus/icons": "^0.0.11",
+    "@wangeditor/editor": "^5.0.1",
+    "@wangeditor/editor-for-vue": "^5.1.11",
+    "axios": "^0.21.1",
+    "core-js": "^3.16.2",
+    "echarts": "^5.1.2",
+    "echarts-for-vue": "^1.4.1",
+    "element-plus": "^1.0.2-beta.71",
+    "js-md5": "^0.7.3",
+    "mockjs": "^1.1.0",
+    "node-sass": "^4.14.1",
+    "strip-ansi": "^7.0.1",
+    "three": "^0.121.0",
+    "vanta": "^0.5.24",
+    "vue": "^3.2.4",
+    "vue-loader-v16": "^16.0.0-beta.5.4",
+    "vue-router": "^4.0.11",
+    "vue3-tree-org": "^3.0.0",
+    "vuex": "^4.0.0-0",
+    "wangeditor": "^4.7.15"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "~4.5.0",
+    "@vue/cli-plugin-router": "~4.5.0",
+    "@vue/cli-plugin-vuex": "~4.5.0",
+    "@vue/cli-service": "~4.5.0",
+    "@vue/compiler-sfc": "^3.2.4",
+    "sass-loader": "^10.4.1"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ]
+}
