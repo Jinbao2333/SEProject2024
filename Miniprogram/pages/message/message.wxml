@@ -18,4 +18,8 @@
        <view>
         <image class="image" src="{{location_path}}" mode='widthFix'></image>
       </view>
+      <!-- <view class="fontSize">长按识别二维码</view>
+      <view class="fontSize">添加小助手微信咨询</view> -->
 </modal>
+
+<!-- <view id="bottom"></view> -->
